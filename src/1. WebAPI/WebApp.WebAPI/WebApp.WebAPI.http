@@ -1,0 +1,6 @@
+@WebApp.WebAPI_HostAddress = http://localhost:5133
+
+GET {{WebApp.WebAPI_HostAddress}}/compliance/
+Accept: application/json
+
+###
