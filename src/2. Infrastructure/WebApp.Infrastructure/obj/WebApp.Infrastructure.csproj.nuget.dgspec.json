@@ -49,6 +49,10 @@
               "target": "Package",
               "version": "[2.1.0, )"
             },
+            "Azure.AI.Projects": {
+              "target": "Package",
+              "version": "[1.0.0-beta.8, )"
+            },
             "Azure.Identity": {
               "target": "Package",
               "version": "[1.13.2, )"

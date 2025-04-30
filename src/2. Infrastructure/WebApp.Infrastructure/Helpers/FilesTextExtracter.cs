@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using DocumentFormat.OpenXml.Packaging;
 using UglyToad.PdfPig;
 
 namespace WebApp.Infrastructure.Helpers
@@ -51,24 +50,6 @@ namespace WebApp.Infrastructure.Helpers
                 sb.AppendLine(page.Text);
             }
             return sb.ToString();
-        }
-
-
-
-        public static string ExtractTextFromWord(Stream stream)
-        {
-            //using var stream = new MemoryStream(docxBytes);
-            using var wordDoc = WordprocessingDocument.Open(stream, false);
-            return wordDoc.MainDocumentPart?.Document?.InnerText ?? string.Empty;
-        }
-
-        private static byte[] StreamToBytes(Stream input)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                input.CopyTo(ms);
-                return ms.ToArray();
-            }
         }
     }
 }

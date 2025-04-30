@@ -16,12 +16,13 @@ namespace WebApp.Infrastructure.Helpers
 
         public EmbeddingService()
         {
-            var endpoint = Configuration.GetAppSetting("AzureOpenAI:Endpoint");
-            var apiKey = Configuration.GetAppSetting("AzureOpenAI:ApiKey");
-            _deploymentName = Configuration.GetAppSetting("AzureOpenAI:DeploymentName");
+            var endpoint = Configuration.GetAppSetting("AzureAI:Endpoint");
+            var apiKey = Configuration.GetAppSetting("AzureAI:ApiKey");
+            _deploymentName = Configuration.GetAppSetting("AzureAI:DeploymentName");
+            _embeddingModel = Configuration.GetAppSetting("AzureAI:EmbeddingModelName");
+
             AzureKeyCredential credential = new AzureKeyCredential(apiKey);
             _azureClient = new(new Uri(endpoint), credential);
-            _embeddingModel = Configuration.GetAppSetting("AzureOpenAI:EmbeddingModelName");
         }
 
         public async Task<IReadOnlyList<float>> GetEmbedding(string input)
