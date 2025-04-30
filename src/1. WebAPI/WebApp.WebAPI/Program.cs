@@ -1,3 +1,7 @@
+using DocumentFormat.OpenXml.Bibliography;
+using System.Data.Common;
+using WebApp.Infrastructure.Helpers;
+
 namespace WebApp.WebAPI
 {
     public class Program
@@ -5,10 +9,9 @@ namespace WebApp.WebAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Configuration
-                   .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                   .AddEnvironmentVariables();
-
+            builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true).AddEnvironmentVariables().Build();
+            var configuration = builder.Configuration;
+            Configuration.Initialize(configuration);
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

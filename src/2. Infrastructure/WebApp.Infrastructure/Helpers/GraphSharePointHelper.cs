@@ -233,6 +233,7 @@ namespace WebApp.Infrastructure.Helpers
 
         public async Task<Stream?> GetSpecificFileStream(string fileName)
         {
+            if (_graphServiceClient == null) Authenticate();
             Stream? fileContent = null;
             try
             {
@@ -250,6 +251,7 @@ namespace WebApp.Infrastructure.Helpers
 
         public async Task<List<Dictionary<string, object>>> FetchDataFromSharePointList(string listName, string fields)
         {
+            if (_graphServiceClient == null) Authenticate();
             var listId = listName == "emails" ? _emailListId : _msgsListId;
             var items = await _graphServiceClient.Sites[_siteId].Lists[listId].Items.GetAsync((requestConfiguration) =>
             {
@@ -276,6 +278,7 @@ namespace WebApp.Infrastructure.Helpers
 
         public async Task<string> UploadFileToSharePoint(string filePath, string fileString)
         {
+            if (_graphServiceClient == null) Authenticate();
             try
             {
                 byte[] fileBytes = Convert.FromBase64String(fileString);

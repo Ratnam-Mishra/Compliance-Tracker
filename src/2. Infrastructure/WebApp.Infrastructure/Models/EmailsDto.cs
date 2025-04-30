@@ -3,7 +3,7 @@
     public class EmailsDto
     {
         public string BodyContent { get; set; }
-        public List<string> ToRecepients { get; set; } 
-        public List<string> CCRecepients { get; set; }
+        public List<string> ToRecipients { get; set; } 
+        public List<string> CcRecipients { get; set; }
     }
 }
