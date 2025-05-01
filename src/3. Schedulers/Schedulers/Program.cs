@@ -18,7 +18,7 @@ namespace Schedulers
                 Configuration.Initialize(configuration);
 
                 var complianceAnalyzer = new UserComplianceAnalyzer();
-                var  documentsResult = complianceAnalyzer.RunVectorCheckOnNewDocuments().Result;
+                //var  documentsResult = complianceAnalyzer.RunVectorCheckOnNewDocuments().Result;
                 var communicationComplianceResult = complianceAnalyzer.ProcessAndValidateUserCommunications().Result;
             }
             catch (Exception ex)

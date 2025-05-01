@@ -122,7 +122,7 @@ namespace WebApp.Infrastructure.Helpers
                 var messagesResponse = await _graphServiceClient.Users[userId].Messages.GetAsync(req =>
                 {
                     req.Headers.Add("Prefer", "outlook.body-content-type=\"text\"");
-                    req.QueryParameters.Filter = $"receivedDateTime le {today} and from/emailAddress/address eq 'rahulmittaljuly2@gmail.com'";
+                    req.QueryParameters.Filter = $"receivedDateTime ge {today} and from/emailAddress/address eq 'rahulmittaljuly2@gmail.com'";
                     req.QueryParameters.Select = new[] { "subject", "body", "toRecipients", "ccRecipients" };
                     req.QueryParameters.Orderby = new[] { "receivedDateTime desc" };
                 });
@@ -154,22 +154,22 @@ namespace WebApp.Infrastructure.Helpers
 
         public async Task<int> CreateEmailDetails(UsersDto user, string emailContent, string matchedPolicyName,
             string matchedPolicyContent, string toRecipients, string ccRecipients, string violationExplanation,
-            string detectedRiskLevel, string matchedPolicySection = "")
+            string detectedRiskLevel, string mainKeyword)
         {
             // Set flag to true for email list
-            return await CreateItemDetails(user, emailContent, matchedPolicyName, matchedPolicyContent, violationExplanation, detectedRiskLevel, matchedPolicySection, _emailListId, toRecipients, ccRecipients);
+            return await CreateItemDetails(user, emailContent, matchedPolicyName, matchedPolicyContent, violationExplanation, detectedRiskLevel, _emailListId, toRecipients, ccRecipients);
         }
 
         public async Task<int> CreateMsgDetails(UsersDto user, string msgContent, string matchedPolicyName,
-            string matchedPolicyContent, string violationExplanation, string detectedRiskLevel, string matchedPolicySection = "")
+            string matchedPolicyContent, string violationExplanation, string detectedRiskLevel, string mainKeyword)
         {
-            return await CreateItemDetails(user, msgContent, matchedPolicyName, matchedPolicyContent, violationExplanation, detectedRiskLevel, matchedPolicySection, _msgsListId);
+            return await CreateItemDetails(user, msgContent, matchedPolicyName, matchedPolicyContent, violationExplanation, detectedRiskLevel, mainKeyword, _msgsListId);
         }
 
 
         private async Task<int> CreateItemDetails(UsersDto user, string content, string matchedPolicyName,
             string matchedPolicyContent, string violationExplanation,
-            string detectedRiskLevel, string matchedPolicySection, string listId, string toRecipients = "", string ccRecipients = "")
+            string detectedRiskLevel, string listId, string mainKeyword, string toRecipients = "", string ccRecipients = "")
         {
             try
             {
@@ -181,11 +181,11 @@ namespace WebApp.Infrastructure.Helpers
                                         {"UserDepartment", user.Department},
                                         {"Content", content},
                                         {"MatchedPolicyName", matchedPolicyName},
-                                        {"MatchedPolicySection", matchedPolicySection},
                                         {"MatchedPolicyContent", matchedPolicyContent},
                                         {"ViolationExplanation", violationExplanation},
                                         {"DetectedRiskLevel", detectedRiskLevel},
-                                        {"DetectedDateTime", DateTime.UtcNow}
+                                        {"DetectedDateTime", DateTime.UtcNow},
+                                        {"MainKeyword",mainKeyword }
                                     };
 
                 if (!string.IsNullOrEmpty(toRecipients) && !string.IsNullOrEmpty(ccRecipients))

@@ -30,7 +30,7 @@ namespace Schedulers
         public async Task<bool?> ProcessAndValidateUserCommunications()
         {
             var allUsers = await _graphSharePointHelper.GetAllUsers();
-            foreach (var user in allUsers.Where(u => u.DisplayName == "Aman Panjwani"))
+            foreach (var user in allUsers)
             {
                 await ProcessUserEmailsAndTeamsMessages(user);
             }
@@ -56,7 +56,7 @@ namespace Schedulers
 
         private async Task AnalyzeUserCommunications(UsersDto user, List<object> communications, string sourceType)
         {
-            var agentInstance = await _complianceAgent.CreateOrReuseComplianceAgentAsync();
+            var agentInstance = _complianceAgent.CreateOrReuseComplianceAgentAsync().Result;
 
             foreach (var communication in communications)
             {
@@ -107,7 +107,8 @@ namespace Schedulers
                                 toRecipientsString,
                                 ccRecipientsString,
                                 breach.ViolationExplanation,
-                                breach.DetectedRiskLevel
+                                breach.DetectedRiskLevel,
+                                breach.MainKeyword
                             );
                         }
                         else if (sourceType == "Teams Chat")
@@ -118,7 +119,8 @@ namespace Schedulers
                                 breach.DocumentTitle,
                                 breach.PolicySentence,
                                 breach.ViolationExplanation,
-                                breach.DetectedRiskLevel
+                                breach.DetectedRiskLevel,
+                                breach.MainKeyword
                             );
                         }
                     }

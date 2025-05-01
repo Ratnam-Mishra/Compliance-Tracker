@@ -29,50 +29,54 @@ namespace WebApp.Infrastructure.Agents
 
         public async Task<Agent> CreateOrReuseComplianceAgentAsync()
         {
-            // Step 1: Check if agent already exists
-            var existingAgents = await _agentsClient.GetAgentsAsync();
-            var agent = existingAgents.Value.FirstOrDefault(a => a.Name == _agentName);
-
-            if (agent != null)
+            try
             {
-                Console.WriteLine($"Reusing existing agent: {agent.Id}");
-                return agent;
-            }
-
-            Console.WriteLine("Agent not found. Creating new one...");
-
-            ListConnectionsResponse connections = await _projectClient.GetConnectionsClient().GetConnectionsAsync(ConnectionType.AzureAISearch).ConfigureAwait(false);
-
-            if (connections?.Value == null || connections.Value.Count == 0)
-            {
-                throw new InvalidOperationException("No connections found for the Azure AI Search.");
-            }
-
-            ConnectionResponse connection = connections.Value[0];
-
-
-            var searchResource = new ToolResources
-            {
-                AzureAISearch = new AzureAISearchResource
+                // Step 1: Check if agent already exists
+                var existingAgents = await _agentsClient.GetAgentsAsync();
+                var agent = existingAgents.Value.FirstOrDefault(a => a.Name == _agentName);
+                if (agent != null)
                 {
-                    IndexList =
+                    Console.WriteLine($"Reusing existing agent: {agent.Id}");
+                    return agent;
+                }
+
+                Console.WriteLine("Agent not found. Creating new one...");
+
+                ListConnectionsResponse connections = await _projectClient.GetConnectionsClient().GetConnectionsAsync(ConnectionType.AzureAISearch).ConfigureAwait(false);
+
+                if (connections?.Value == null || connections.Value.Count == 0)
+                {
+                    throw new InvalidOperationException("No connections found for the Azure AI Search.");
+                }
+
+                ConnectionResponse connection = connections.Value[0];
+
+
+                var searchResource = new ToolResources
+                {
+                    AzureAISearch = new AzureAISearchResource
+                    {
+                        IndexList =
                                 {
                                     new AISearchIndexResource(connection.Id, _indexName) {
                                         QueryType= AzureAISearchQueryType.Semantic
                                     }
                                 }
-                }
-            };
+                    }
+                };
 
-            var agentResponse = await _agentsClient.CreateAgentAsync(
-                model: _deploymentName,
-                name: _agentName,
-                instructions: ConfigConstants.agentInstructions,
-                tools: new List<ToolDefinition> { new AzureAISearchToolDefinition() },
-            toolResources: searchResource);
+                var agentResponse = await _agentsClient.CreateAgentAsync(
+                    model: _deploymentName,
+                    name: _agentName,
+                    instructions: ConfigConstants.agentInstructions,
+                    tools: new List<ToolDefinition> { new AzureAISearchToolDefinition() },
+                toolResources: searchResource);
+                return agentResponse.Value;
+            }
+            catch (Exception ex) { 
+                Console.WriteLine(ex.Message); }
 
-            return agentResponse.Value;
-
+            return null;
         }
 
 

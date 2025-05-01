@@ -36,23 +36,23 @@
         };
 
         public static string AIPrompt = @"
-                🛠️ Strict JSON-Format Prompt (with Risk Level)
-                Analyze the following {0} content for any compliance or security breaches by searching my company’s uploaded documents in Azure AI Search.
+                🛠️ Strict JSON-Format Prompt (with Risk Level & Keyword)
+                Analyze the following {0} content for any compliance or security breaches by comparing it with my organization’s uploaded documents in Azure AI Search.
 
-                For each identified breach, return the response strictly in JSON array format as described below.
-                Do not add any extra text or explanation outside of the JSON.
+                Return your response strictly as a **JSON array**. Do not include any explanations or additional text outside the array.
 
-                Each breach must be a JSON object containing these fields:
+                Each item in the array must be a JSON object with the following fields:
 
                 - BreachNumber (integer starting from 1)
-                - Source (""{0}"")
+                - Source (""{0}"" — either ""Teams Chat"" or ""Email"")
                 - DocumentTitle (string)
-                - Section (string, optional, empty string """" if not available)
-                - PolicySentence (string, exact sentence or line from the document)
-                - ViolationExplanation (string, explaining how the action violated the policy)
+                - Section (string, optional, set to """" if not applicable)
+                - PolicySentence (string, the exact matching sentence or excerpt from the document)
+                - ViolationExplanation (string, explaining how the policy was violated)
                 - DetectedRiskLevel (""High"", ""Medium"", or ""Low"")
+                - MainKeyword (string, the primary term or phrase that triggered the match — e.g., ""password"", ""confidential"", etc.)
 
-                If no breaches are found, return an empty array like this:
+                If no violations are detected, return exactly:
                 []
 
                 {0} Content to Analyze:

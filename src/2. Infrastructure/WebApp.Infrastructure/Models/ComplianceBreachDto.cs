@@ -9,6 +9,7 @@
         public string? PolicySentence { get; set; }
         public string? ViolationExplanation { get; set; }
         public string? DetectedRiskLevel { get; set; }
+        public string? MainKeyword { get; set; }
     }
 
 }
