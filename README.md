@@ -116,3 +116,26 @@ Update `appsettings.json` or Azure configuration with the following settings:
     "Endpoint": "<Your-Azure-Search-Endpoint>"
   }
 }
+
+---
+
+## 🚀 Setup Instructions
+
+Follow these steps to set up the **Compliance Tracker Agent** on your local machine:
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+- [.NET SDK 8.0](https://dotnet.microsoft.com/download/dotnet) (for building and running the project)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) or another compatible IDE
+- [Azure Subscription](https://azure.microsoft.com/en-us/free/) (if you're using Azure services like OpenAI, Microsoft Graph, etc.)
+- [Microsoft Graph API access](https://learn.microsoft.com/en-us/graph/overview) (for interacting with SharePoint and other Microsoft services)
+
+### Clone the Repository
+
+First, clone the repository to your local machine:
+
+```bash
+git clone https://github.com/yourusername/ComplianceTrackerAgent.git
+cd ComplianceTrackerAgent
