@@ -19,7 +19,7 @@ namespace WebApp.WebAPI
             {
                 options.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyOrigin()
+                    policy.WithOrigins("http://localhost:5173")
                           .AllowAnyMethod()
                           .AllowAnyHeader()
                           .WithExposedHeaders("x-custom-header")
@@ -35,6 +35,7 @@ namespace WebApp.WebAPI
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
             app.UseAuthorization();
             app.MapControllers();
             app.Run();

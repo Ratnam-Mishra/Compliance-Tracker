@@ -122,7 +122,7 @@ namespace WebApp.Infrastructure.Helpers
                 var messagesResponse = await _graphServiceClient.Users[userId].Messages.GetAsync(req =>
                 {
                     req.Headers.Add("Prefer", "outlook.body-content-type=\"text\"");
-                    req.QueryParameters.Filter = $"receivedDateTime ge {today} and from/emailAddress/address eq 'rahulmittaljuly2@gmail.com'";
+                    req.QueryParameters.Filter = $"receivedDateTime le {today}";
                     req.QueryParameters.Select = new[] { "subject", "body", "toRecipients", "ccRecipients" };
                     req.QueryParameters.Orderby = new[] { "receivedDateTime desc" };
                 });

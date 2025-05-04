@@ -1,0 +1,107 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*.local
+
+# Vite cache
+.vite/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional: Coverage and reports
+coverage/
+*.lcov
+
+# Optional: local dev database or tools
+*.local
+
+appsettings.Development.json
+appsettings.Local.json
+appsettings.json
+.vs/
+packages
+## Build Folders ##
+bin/
+obj/
+out/
+
+## User-specific files ##
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Rider and VS Code ##
+.idea/
+.vscode/
+
+## Visual Studio ##
+.vs/
+Generated_Code/
+
+## Logs and dumps ##
+*.log
+*.tlog
+*.cache
+*.pid
+*.sdf
+*.pdb
+*.mdb
+
+## Auto-generated packages ##
+*.nupkg
+*.snupkg
+*.symbols.nupkg
+
+## ASP.NET sensitive files ##
+appsettings.Development.json
+secrets.json
+.env
+
+## Publish artifacts ##
+publish/
+*.Publish.xml
+
+## Test Results ##
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+*.testsettings
+*.vsmdi
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+## Other ##
+_ReSharper*/
+*.sql
+*.db
+*.bak
+*.mdf
+*.ldf

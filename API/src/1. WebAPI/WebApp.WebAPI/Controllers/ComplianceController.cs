@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using WebApp.Infrastructure.Agents;
 using WebApp.Infrastructure.Helpers;
 using WebApp.Infrastructure.Models;
 
@@ -11,10 +13,12 @@ namespace WebApp.WebAPI.Controllers
         private readonly GraphSharePointHelper _graphSharePointHelper;
         private readonly EmbeddingService _embeddingService;
         private readonly SearchService _searchService;
+        private readonly ComplainceAgent _complianceAgent;
 
         public ComplianceController()
         {
             _graphSharePointHelper = new GraphSharePointHelper();
+            _complianceAgent = new ComplainceAgent();
         }
         /// <summary>
         /// Fetch all the compliance & security policies from SharePoint
@@ -141,7 +145,7 @@ namespace WebApp.WebAPI.Controllers
         [HttpGet("GetKeywords")]
         public async Task<IActionResult> GetKeywords()
         {
-            string fieldsToSelect = "UserEmail,UserDisplayName,MainKeyword";
+            string fieldsToSelect = "UserEmail,UserDisplayName,MainKeyword,DetectedDateTime";
 
             var messagesList = await _graphSharePointHelper.FetchDataFromSharePointList("msgs", fieldsToSelect);
             var emailsList = await _graphSharePointHelper.FetchDataFromSharePointList("emails", fieldsToSelect);
@@ -153,13 +157,14 @@ namespace WebApp.WebAPI.Controllers
                 foreach (var item in sourceList)
                 {
                     if (item.TryGetValue("UserEmail", out var emailObj) &&
-                        item.TryGetValue("MainKeyword", out var violationObj))
+                        item.TryGetValue("MainKeyword", out var violationObj) && item.TryGetValue("DetectedDateTime", out var timeObj))
                     {
                         var email = emailObj?.ToString();
                         var violation = violationObj?.ToString();
                         var displayName = item.TryGetValue("UserDisplayName", out var displayNameObj)
                             ? displayNameObj?.ToString()
                             : "";
+                        var time = timeObj?.ToString();
 
                         if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(violation))
                         {
@@ -167,7 +172,8 @@ namespace WebApp.WebAPI.Controllers
                             {
                                 Email = email.ToLower(),
                                 DisplayName = displayName ?? "",
-                                ViolationExplanation = violation
+                                ViolationExplanation = violation,
+                                Time = time
                             });
                         }
                     }
@@ -243,17 +249,34 @@ namespace WebApp.WebAPI.Controllers
         /// </summary>
         /// <param name="userMessage"></param>
         /// <returns></returns>
-        [HttpGet("FetchMsgFromSearch")]
-        public async Task<bool> FetchMsgFromSearch(string userMessage)
+        [HttpPost("FetchMsgFromSearch")]
+        public async Task<IActionResult> FetchMsgFromSearch([FromBody] string userMessage)
         {
-            var embedding = await _embeddingService.GetEmbedding(userMessage);
-            var similarDocs = await _searchService.SearchSimilarDocuments(userMessage, embedding);
-            if (similarDocs.Any())
+            if (string.IsNullOrWhiteSpace(userMessage))
             {
-                return true;
+                return BadRequest("User message is required.");
             }
-            return false;
+
+            try
+            {
+                var agentInstance = await _complianceAgent.CreateOrReuseComplianceAgentAsync();
+
+                var prompt = $"Check the following content against the compliance and security documents stored in Azure AI Search: {userMessage}";
+                var similarDocs = await _complianceAgent.AskAgentAsync(agentInstance, prompt);
+
+                if (similarDocs != null && similarDocs.Any())
+                {
+                    return Ok(similarDocs);
+                }
+
+                return Ok("Not applicable!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while processing the request.");
+            }
         }
+
 
         /// <summary>
         /// Upload file in the document library SharePoint

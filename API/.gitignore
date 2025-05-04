@@ -2,3 +2,65 @@ appsettings.Development.json
 appsettings.Local.json
 appsettings.json
 .vs/
+packages
+## Build Folders ##
+bin/
+obj/
+out/
+
+## User-specific files ##
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Rider and VS Code ##
+.idea/
+.vscode/
+
+## Visual Studio ##
+.vs/
+Generated_Code/
+
+## Logs and dumps ##
+*.log
+*.tlog
+*.cache
+*.pid
+*.sdf
+*.pdb
+*.mdb
+
+## Auto-generated packages ##
+*.nupkg
+*.snupkg
+*.symbols.nupkg
+
+## ASP.NET sensitive files ##
+appsettings.Development.json
+secrets.json
+.env
+
+## Publish artifacts ##
+publish/
+*.Publish.xml
+
+## Test Results ##
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+*.testsettings
+*.vsmdi
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+## Other ##
+_ReSharper*/
+*.sql
+*.db
+*.bak
+*.mdf
+*.ldf

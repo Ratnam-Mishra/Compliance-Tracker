@@ -665,7 +665,10 @@
           "System.Configuration.ConfigurationManager": "9.0.4"
         },
         "runtime": {
-          "WebApp.Infrastructure.dll": {}
+          "WebApp.Infrastructure.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
